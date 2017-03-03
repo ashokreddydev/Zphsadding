@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parse/1.9.2/parse.min.js"></script>
+<script>
+var datalist=[];
+$(document).ready(function(){
+
+$("#dvData").hide();
+$("#btnExport").hide();
+
+						 Parse.initialize('YPPlAP7skLPweDZSALMR');
+							Parse.serverURL = 'https://sampleforparseserver.herokuapp.com/parse';
+
+					 
+					 var query = new Parse.Query('ZphsData');
+					query.find({
+					  success: function(results) {
+					  if(results.length==0)
+					  {
+					  alert("empty data")
+					  }
+					  else
+					  {
+					 $("#dvData").show();
+					 $("#btnExport").show();
+					  console.log(results)
+					  
+					  for (var i=0;i<results.length;i++)
+			{
+								datalist.push(results[i].toJSON().Name);
+								datalist.push(results[i].toJSON().Number);
+			}
+					  
+								
+
+				var table="";
+				var num=1;
+			for (var i=0;i<datalist.length;i=i+2)
+			{
+			
+				var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td></tr>"
+					table=table+tabledata;
+			}
+			
+			
+			$("#tabledatacontent").html(table);
+						// results is an array of Parse.Object.
+						}
+					  },
+		
+					  error: function(error) {
+						// error is an instance of Parse.Error.
+					  }
+					});
+
+
+
+
+
+	 
+
+
+});
+</script>
+<style>
+#dvData
+{
+margin-top: 100px;
+
+}
+
+table {
+    border: 1px solid black;
+}
+th {
+    border: 1px solid black;
+    padding: 5px;
+    background-color:grey;
+    color: white;
+}
+td {
+    border: 1px solid black;
+    padding: 5px;
+}
+input {
+    font-size: 12pt;
+    font-family: Calibri;
+}
+
+
+</style>
+
+</head>
+<body>
+<!--  <input type="button" id="btnExport" value=" Export Table data into Excel " /> -->
+ 
+<br/>
+<br/>
+<div class="container">
+ 
+  <form>
+    <div class="form-group">
+    <div class="col-xs-4">
+     
+      <input type="text" class="form-control" id="usr" placeholder="Name">
+	  <span id="errormsgusr" style="color: red;font-weight: bold;"><span>
+    </div>
+     <div class="col-xs-4">
+      
+      <input type="text" class="form-control" id="num" placeholder="Number">
+	  <span id="errormsg1" style="color: red;font-weight: bold;"><span>
+	   <span id="errormsg" style="color: red;font-weight: bold;"><span>
+    </div>
+    <div class="col-xs-4">
+	
+      <button type="button" class="btn btn-warning" id="adding">Adding</button>
+    </div>
+    </div>
+  </form>
+
+ <div class="form-group">
+
+<div id="dvData" >
+
+ <table  class='table'>
+	 <tr> 
+		<th>S No</th>
+		 <th>Name</th>
+		 <th>Number</th>
+	 </tr>
+	 <tbody id="tabledatacontent">
+	 </tbody>
+	 
+</table>
+   
+</div>
+</div>
+
+<div class="form-group">
+    <div class="col-xs-4">
+     
+      
+    </div>
+     <div class="col-xs-4">
+      
+      <button type="button" class="btn btn-warning" id="btnExport" >Download</button>
+    </div>
+    <div class="col-xs-4">
+	
+    
+    </div>
+    </div>
+</div>
+
+			<script>
+				$("#btnExport").click(function(e) {
+		//getting values of current time for generating the file name
+		var dt = new Date();
+		var day = dt.getDate();
+		var month = dt.getMonth() + 1;
+		var year = dt.getFullYear();
+		var hour = dt.getHours();
+		var mins = dt.getMinutes();
+		var postfix = day + "." + month + "." + year + "_" + hour + "." + mins;
+		//creating a temporary HTML link element (they support setting file names)
+		var a = document.createElement('a');
+		//getting data from our div that contains the HTML table
+		var data_type = 'data:application/vnd.ms-excel';
+		var table_div = document.getElementById('dvData');
+		var table_html = table_div.outerHTML.replace(/ /g, '%20');
+		a.href = data_type + ', ' + table_html;
+		//setting the file name
+		a.download = 'exported_table_' + postfix + '.xls';
+		//triggering the function
+		a.click();
+		//just in case, prevent default behaviour
+		e.preventDefault();
+	});
+			
+			
+			
+			  $("#num").keypress(function (e) {
+     //if not numeric, then it don't let you type
+		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        $("#errormsg").html("Digits Only").show().fadeOut("slow");
+               return false;
+    }
+   });
+			</script>
+			
+			
+			<script>
+			
+			
+$("#adding").click(function () {
+				var results=0;
+
+									var name=$("#usr").val();
+									var numer=$("#num").val();
+								
+									 	if((name==null)||(name==""))
+										{
+										
+										$("#errormsgusr").text("Name is required");
+											 
+											results++;
+										}
+										else
+										{
+										$('#errormsgusr').empty();
+											
+										}
+										
+										
+										
+											if((numer==null)||(numer==""))
+										{
+										
+										$("#errormsg1").text("Number is required");
+											 
+												results++;
+										}
+										else
+										{
+												if(numer.length==10)
+												{
+												
+												$('#errormsg1').empty();
+												}
+												
+												else{
+												$("#errormsg1").text("Please enter 10 number");
+												results++;
+												}
+											 
+											
+										}
+											for (var i=0;i<datalist.length;i=i+2)
+											{
+											
+												if(datalist[i+1]==numer)
+												{
+												alert("ALREDY EXIST DATA")
+												results++;
+												
+												}
+													
+											}
+										
+										
+										if(results==0)
+										{
+													$("#btnExport").show();
+													$("#dvData").show();
+												datalist.push(name);
+												datalist.push(numer);
+										
+												var obj = new Parse.Object('ZphsData');
+												obj.set('Name',name);
+												obj.set('Number',numer);
+											
+
+												obj.save().then(function(obj) {
+												  console.log(obj.toJSON());
+												 
+												}, function(err) { console.log(err); });
+										
+										
+											var table="";
+											var num=1;
+											for (var i=0;i<datalist.length;i=i+2)
+											{
+											
+												var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td></tr>"
+													table=table+tabledata;
+											}
+											
+											
+											$("#tabledatacontent").html(table);
+										
+										
+										}
+																		 
+									
+			
+			
+         				
+
+
+							});
+			</script>
+</body>
+</html>
