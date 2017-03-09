@@ -18,8 +18,8 @@ $(document).ready(function(){
 $("#dvData").hide();
 $("#btnExport").hide();
 
-						Parse.initialize('YPPlAP7skLPweDZSALMR');
-						Parse.serverURL = 'https://sampleforparseserver.herokuapp.com/parse';
+						 Parse.initialize('YPPlAP7skLPweDZSALMR');
+							Parse.serverURL = 'https://sampleforparseserver.herokuapp.com/parse';
 
 					 
 					 var query = new Parse.Query('ZphsData');
@@ -39,17 +39,16 @@ $("#btnExport").hide();
 			{
 								datalist.push(results[i].toJSON().Name);
 								datalist.push(results[i].toJSON().Number);
-								datalist.push(results[i].toJSON().village);
 			}
 					  
 								
 
 				var table="";
 				var num=1;
-			for (var i=0;i<datalist.length;i=i+3)
+			for (var i=0;i<datalist.length;i=i+2)
 			{
 			
-				var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td><td>"+datalist[i+2]+"</td></tr>"
+				var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td></tr>"
 					table=table+tabledata;
 			}
 			
@@ -103,32 +102,23 @@ input {
 
 </head>
 <body>
-<!--  <input type="button" id="btnExport" value=" Export Table data into Excel " /> -->
- 
-<br/>
-<br/>
+
 <div class="container">
  
   <form>
     <div class="form-group">
-    <div class="col-xs-3">
+    <div class="col-xs-4">
      
       <input type="text" class="form-control" id="usr" placeholder="Name">
 	  <span id="errormsgusr" style="color: red;font-weight: bold;"><span>
     </div>
-     <div class="col-xs-3">
+     <div class="col-xs-4">
       
       <input type="text" class="form-control" id="num" placeholder="Number">
 	  <span id="errormsg1" style="color: red;font-weight: bold;"><span>
 	   <span id="errormsg" style="color: red;font-weight: bold;"><span>
     </div>
-	 <div class="col-xs-3">
-      
-      <input type="text" class="form-control" id="village" placeholder="Village">
-	  <span id="errorvillage" style="color: red;font-weight: bold;"><span>
-	   
-    </div>
-    <div class="col-xs-3">
+    <div class="col-xs-4">
 	
       <button type="button" class="btn btn-warning" id="adding">Adding</button>
     </div>
@@ -143,8 +133,7 @@ input {
 	 <tr> 
 		<th>S No</th>
 		 <th>Name</th>
-		  <th>Number</th>
-		 <th>Village</th>
+		 <th>Number</th>
 	 </tr>
 	 <tbody id="tabledatacontent">
 	 </tbody>
@@ -216,7 +205,6 @@ $("#adding").click(function () {
 
 									var name=$("#usr").val();
 									var numer=$("#num").val();
-									var village=$("#village").val();
 								
 									 	if((name==null)||(name==""))
 										{
@@ -268,36 +256,16 @@ $("#adding").click(function () {
 											}
 										
 										
-										
-										
-											if((village==null)||(village==""))
-										{
-										
-										$("#errorvillage").text("village is required");
-											 
-											results++;
-										}
-										else
-										{
-										$('#errorvillage').empty();
-											
-										}
-										
-										
-										
-										
 										if(results==0)
 										{
 													$("#btnExport").show();
 													$("#dvData").show();
 												datalist.push(name);
 												datalist.push(numer);
-												datalist.push(village);
 										
 												var obj = new Parse.Object('ZphsData');
 												obj.set('Name',name);
 												obj.set('Number',numer);
-												obj.set('Village',village);
 											
 
 												obj.save().then(function(obj) {
@@ -308,10 +276,10 @@ $("#adding").click(function () {
 										
 											var table="";
 											var num=1;
-											for (var i=0;i<datalist.length;i=i+3)
+											for (var i=0;i<datalist.length;i=i+2)
 											{
 											
-												var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td><td>"+datalist[i+2]+"</td></tr>"
+												var tabledata="<tr><td>"+ num++ +"</td><td>"+datalist[i]+"</td><td>"+datalist[i+1]+"</td></tr>"
 													table=table+tabledata;
 											}
 											
